@@ -1,3 +1,4 @@
+
 import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.http.*
@@ -52,6 +53,9 @@ fun main() {
                     this::class.java.classLoader.getResource("register.html")!!.readText(),
                     ContentType.Text.Html
                 )
+            }
+            post("/register"){
+
             }
             static("/") {
                 resources("")
