@@ -8,15 +8,10 @@ import io.ktor.routing.*
 import io.ktor.serialization.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
-import org.litote.kmongo.*
-import org.litote.kmongo.coroutine.*
-import org.litote.kmongo.reactivestreams.KMongo
-import com.mongodb.ConnectionString
 
-val shoppingList = mutableListOf(
-    ShoppingListItem("Cucumbers 🥒", 1),
-    ShoppingListItem("Tomatoes 🍅", 2),
-    ShoppingListItem("Orange Juice 🍊", 3)
+val users = mutableListOf(
+    User("seyerman", "seyer123", "Juan", "Reyes", "01/04/1995"),
+    User("favellaneda", "fave321", "Fabio", "Avellaneda", "06/09/1987")
 )
 
 fun main() {
@@ -34,23 +29,27 @@ fun main() {
             gzip()
         }
         routing {
-            route(ShoppingListItem.path) {
+            route(User.path) {
                 get {
-                    call.respond(shoppingList)
+                    call.respond(users)
                 }
                 post {
-                    shoppingList += call.receive<ShoppingListItem>()
+                    users += call.receive<User>()
                     call.respond(HttpStatusCode.OK)
                 }
-                delete("/{id}") {
-                    val id = call.parameters["id"]?.toInt() ?: error("Invalid delete request")
-                    shoppingList.removeIf { it.id == id }
-                    call.respond(HttpStatusCode.OK)
-                }
+            }
+            post("/registerAuth") {
+
             }
             get("/") {
                 call.respondText(
                     this::class.java.classLoader.getResource("index.html")!!.readText(),
+                    ContentType.Text.Html
+                )
+            }
+            get("/register") {
+                call.respondText(
+                    this::class.java.classLoader.getResource("register.html")!!.readText(),
                     ContentType.Text.Html
                 )
             }
