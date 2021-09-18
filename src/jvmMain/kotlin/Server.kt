@@ -39,8 +39,8 @@ fun main() {
                     call.respond(HttpStatusCode.OK)
                 }
             }
-            post("/registerAuth") {
-
+            post("/loginAuth") {
+                call.respondText("Hello, user!")
             }
             get("/") {
                 call.respondText(
