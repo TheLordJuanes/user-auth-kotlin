@@ -15,6 +15,15 @@ val users = mutableListOf(
     User("favellaneda", "fave321", "Fabio", "Avellaneda", "06/09/1987")
 )
 
+fun getUserByUsername(username: String): User? {
+    for (user in users) {
+        if (user.username == username) {
+            return user
+        }
+    }
+    return null
+}
+
 fun main() {
     embeddedServer(Netty, 9090) {
         install(ContentNegotiation) {
@@ -23,7 +32,6 @@ fun main() {
         install(CORS) {
             method(HttpMethod.Get)
             method(HttpMethod.Post)
-            method(HttpMethod.Delete)
             anyHost()
         }
         install(Compression) {
@@ -39,8 +47,27 @@ fun main() {
                     call.respond(HttpStatusCode.OK)
                 }
             }
-            post("/loginAuth") {
-                call.respondText("Hello, user!")
+            post("/signIn") {
+                val params = call.receiveParameters()
+                val username: String = params["Username"].toString()
+                val password: String = params["Password"].toString()
+                var signed: User? = getUserByUsername(username)
+                if (signed != null) {
+                    if (signed.password == password) {
+                        call.respondRedirect("/signedIn")
+                    } else {
+                        //TO DO
+                        //alert("The password is wrong!")
+                        call.respondRedirect("/")
+                    }
+                } else {
+                    //TO DO
+                    //alert("This username doesn't exist!")
+                    call.respondRedirect("/")
+                }
+            }
+            post("/signUp") {
+                //TO DO
             }
             get("/") {
                 call.respondText(
@@ -54,8 +81,11 @@ fun main() {
                     ContentType.Text.Html
                 )
             }
-            post("/register"){
-
+            get("/signedIn") {
+                call.respondText(
+                    this::class.java.classLoader.getResource("signedIn.html")!!.readText(),
+                    ContentType.Text.Html
+                )
             }
             static("/") {
                 resources("")

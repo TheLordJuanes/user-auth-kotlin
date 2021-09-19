@@ -6,7 +6,8 @@ import kotlinx.coroutines.*
 
 private val scope = MainScope()
 
-val App = functionalComponent<RProps> { _ ->
+val App = functionalComponent<RProps> {
+
     val (users, setUsers) = useState(emptyList<User>())
 
     useEffect {

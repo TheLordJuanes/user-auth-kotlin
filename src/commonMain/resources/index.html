@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign up - RPC</title>
+    <title>Sign in - RPC</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
 </head>
 <body>
@@ -15,16 +15,6 @@
                     aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                <ul class="navbar-nav flex-grow-1">
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" href="/rcp-auth">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" href="#">Privacy</a>
-                    </li>
-                </ul>
-            </div>
         </div>
     </nav>
 </header>
@@ -32,20 +22,20 @@
 <br>
 <div class="text-center">
     <div>
-        <h1 class="text-center">Competitive Programming Network</h1> <br />
+        <h1 class="text-center">RPC :: Red de Programación Competitiva</h1> <br />
         <div>
             <a class="navbar-brand" href="#"><img src="https://pbs.twimg.com/profile_images/493847405670850561/qslkfHlq_400x400.jpeg" alt="RPC_Logo" width="100" height="100"/></a>
-            <br>
+            <br><br>
             <div class="d-flex justify-content-center">
                 <div class="row">
-                    <form action="/loginAuth" method="post">
+                    <form action="/signIn" method="post">
                         <div class="form-group">
                             <label class="control-label">Username</label>
-                            <input class="form-control" name="Username" />
+                            <input class="form-control" name="Username" id="username" required/>
                         </div>
                         <div class="form-group">
                             <label class="control-label">Password</label>
-                            <input type="password" class="form-control" name="Password"/>
+                            <input type="password" class="form-control" name="Password" id="password" required/>
                         </div>
                         <div class="form-group">
                             <br>

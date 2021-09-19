@@ -15,16 +15,6 @@
                     aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                <ul class="navbar-nav flex-grow-1">
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" href="/rcp-auth">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" href="#">Privacy</a>
-                    </li>
-                </ul>
-            </div>
         </div>
     </nav>
 </header>
@@ -32,10 +22,10 @@
 <br>
 <div class="text-center">
     <div>
-        <h1 class="text-center">Competitive Programming Network</h1> <br />
+        <h1 class="text-center">RPC :: Red de Programación Competitiva</h1> <br />
         <div>
             <a class="navbar-brand" href="#"><img src="https://pbs.twimg.com/profile_images/493847405670850561/qslkfHlq_400x400.jpeg" alt="RPC_Logo" width="100" height="100"/></a>
-            <br>
+            <br><br>
             <div class="d-flex justify-content-center">
                 <div class="row">
                     <form action="/registerAuth" method="post">
@@ -65,7 +55,7 @@
                         </div>
                         <br>
                         <div class="form-group mt-3 d-block">
-                            <input type="submit" value="Create" class="btn btn-primary" />
+                            <input type="submit" value="Create account" class="btn btn-primary" onclick="checkPassword()" />
                         </div>
                     </form>
                     <div class="form-group mt-3 d-block">
@@ -78,5 +68,11 @@
         </div>
     </div>
 </div>
+<script>function checkPassword() {
+            let password = document.getElementById("Password").value;
+            let cnfrmPassword = document.getElementById("ConfirmPwd").value;
+            if (password != cnfrmPassword)
+                alert("Password don't match!");
+        }</script>
 </body>
 </html>

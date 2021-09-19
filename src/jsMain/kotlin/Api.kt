@@ -5,7 +5,7 @@ import io.ktor.client.features.json.JsonFeature
 import io.ktor.client.features.json.serializer.KotlinxSerializer
 import kotlinx.browser.window
 
-val endpoint = window.location.origin // only needed until https://youtrack.jetbrains.com/issue/KTOR-453 is resolved
+val endpoint = window.location.origin
 
 val jsonClient = HttpClient {
     install(JsonFeature) { serializer = KotlinxSerializer() }
@@ -20,8 +20,4 @@ suspend fun addUser(user: User) {
         contentType(ContentType.Application.Json)
         body = user
     }
-}
-
-suspend fun deleteUser(user: User) {
-    jsonClient.delete<Unit>(endpoint + User.path + "/${user.id}")
 }
