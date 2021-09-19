@@ -9,12 +9,12 @@ import io.ktor.routing.*
 import io.ktor.serialization.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
+import java.io.File
 
-val users = mutableListOf(
+var users = mutableListOf(
     User("seyerman", "seyer123", "Juan", "Reyes", "01/04/1995"),
     User("favellaneda", "fave321", "Fabio", "Avellaneda", "06/09/1987")
 )
-
 fun getUserByUsername(username: String): User? {
     for (user in users) {
         if (user.username == username) {
@@ -22,6 +22,20 @@ fun getUserByUsername(username: String): User? {
         }
     }
     return null
+}
+
+fun saveUsersInTextFile() {
+    val filename = "database.txt"
+    var line = "Username Password Firstname Lastname Birthdate\n"
+    for (user in users) {
+        line += user.username + " " + user.password + " " + user.firstName + " " + user.lastName + " " + user.birthDate + "\n"
+    }
+    File(filename).writeText(line)
+}
+
+fun addUser(data: String) {
+    var parts = data.split("\n")
+    users = null
 }
 
 fun main() {
@@ -51,9 +65,10 @@ fun main() {
                 val params = call.receiveParameters()
                 val username: String = params["Username"].toString()
                 val password: String = params["Password"].toString()
-                var signed: User? = getUserByUsername(username)
+                val signed: User? = getUserByUsername(username)
                 if (signed != null) {
                     if (signed.password == password) {
+                        //signed.signIn.
                         call.respondRedirect("/signedIn")
                     } else {
                         //TO DO
@@ -81,6 +96,30 @@ fun main() {
                     ContentType.Text.Html
                 )
             }
+            post("/register") {
+                val params = call.receiveParameters()
+                val username: String = params["Username"].toString()
+                val firstname: String = params["Firstname"].toString()
+                val lastname: String = params["Lastname"].toString()
+                val password: String = params["Password"].toString()
+                val confirmpwd: String = params["ConfirmPwd"].toString()
+                val birthdate: String = params["Birthdate"].toString()
+                val signed: User? = getUserByUsername(username)
+                if(signed == null){
+                    if(confirmpwd == password){
+                        var user = User(username,password, firstname,lastname, birthdate)
+                        users.add(user)
+                    }
+                    else{
+                        val alertDialogBuilder = AlertDialog.Builder(this)
+                        alertDialogBuilder.setTitle("Welcome!")
+
+                    }
+                }
+                else{
+                    //alert el usuario ya existe
+                }
+            }
             get("/signedIn") {
                 call.respondText(
                     this::class.java.classLoader.getResource("signedIn.html")!!.readText(),
@@ -93,3 +132,5 @@ fun main() {
         }
     }.start(wait = true)
 }
+
+
