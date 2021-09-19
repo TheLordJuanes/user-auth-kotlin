@@ -11,6 +11,9 @@ import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import java.io.File
 
+const val delimiter: String = ";"
+const val fileName: String = "database.txt"
+
 var users = mutableListOf(
     User("seyerman", "seyer123", "Juan", "Reyes", "01/04/1995"),
     User("favellaneda", "fave321", "Fabio", "Avellaneda", "06/09/1987")
@@ -25,17 +28,21 @@ fun getUserByUsername(username: String): User? {
 }
 
 fun saveUsersInTextFile() {
-    val filename = "database.txt"
-    var line = "Username Password Firstname Lastname Birthdate\n"
+    var line = "Username;Password;Firstname;Lastname;Birthdate\n"
     for (user in users) {
-        line += user.username + " " + user.password + " " + user.firstName + " " + user.lastName + " " + user.birthDate + "\n"
+        line += user.username + delimiter + user.password + delimiter + user.firstName + delimiter + user.lastName + delimiter + user.birthDate + "\n"
     }
-    File(filename).writeText(line)
+    File(fileName).writeText(line)
 }
 
-fun addUser(data: String) {
-    var parts = data.split("\n")
-    users = null
+fun loadUsers(data: String) {
+    val parts = data.split("\n")
+    users.clear()
+    for (i in 1 until parts.size) {
+        val parts2 = parts[i].split(";")
+        val user = User(parts2[0], parts2[1], parts2[3], parts2[3], parts2[4])
+        users.add(user)
+    }
 }
 
 fun main() {
@@ -82,43 +89,46 @@ fun main() {
                 }
             }
             post("/signUp") {
-                //TO DO
+                val params = call.receiveParameters()
+                val username: String = params["Username"].toString()
+                val firstname: String = params["Firstname"].toString()
+                val lastname: String = params["Lastname"].toString()
+                val password: String = params["Password"].toString()
+                val confirmPwd: String = params["ConfirmPwd"].toString()
+                val birthdate: String = params["Birthdate"].toString()
+                val signed: User? = getUserByUsername(username)
+                if(signed == null) {
+                    if(confirmPwd == password) {
+                        val user = User(username,password, firstname,lastname, birthdate)
+                        users.add(user)
+                        saveUsersInTextFile()
+                        // alert new user successfully created
+                        call.respondRedirect("/")
+                    }
+                    else {
+                        //val alertDialogBuilder = AlertDialog.Builder(this)
+                        //alertDialogBuilder.setTitle("Welcome!")
+                        call.respondRedirect("/register")
+                    }
+                }
+                else{
+                    //alert el usuario ya existe
+                    call.respondRedirect("/register")
+                }
             }
             get("/") {
                 call.respondText(
                     this::class.java.classLoader.getResource("index.html")!!.readText(),
                     ContentType.Text.Html
                 )
+                val data = File(fileName).inputStream().readBytes().toString(Charsets.UTF_8)
+                loadUsers(data)
             }
             get("/register") {
                 call.respondText(
                     this::class.java.classLoader.getResource("register.html")!!.readText(),
                     ContentType.Text.Html
                 )
-            }
-            post("/register") {
-                val params = call.receiveParameters()
-                val username: String = params["Username"].toString()
-                val firstname: String = params["Firstname"].toString()
-                val lastname: String = params["Lastname"].toString()
-                val password: String = params["Password"].toString()
-                val confirmpwd: String = params["ConfirmPwd"].toString()
-                val birthdate: String = params["Birthdate"].toString()
-                val signed: User? = getUserByUsername(username)
-                if(signed == null){
-                    if(confirmpwd == password){
-                        var user = User(username,password, firstname,lastname, birthdate)
-                        users.add(user)
-                    }
-                    else{
-                        val alertDialogBuilder = AlertDialog.Builder(this)
-                        alertDialogBuilder.setTitle("Welcome!")
-
-                    }
-                }
-                else{
-                    //alert el usuario ya existe
-                }
             }
             get("/signedIn") {
                 call.respondText(
@@ -132,5 +142,3 @@ fun main() {
         }
     }.start(wait = true)
 }
-
-
