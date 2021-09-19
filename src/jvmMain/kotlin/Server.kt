@@ -35,7 +35,7 @@ fun saveUsersInTextFile() {
 
 fun addUser(data: String) {
     var parts = data.split("\n")
-    users = null
+    users=null
 }
 
 fun main() {
