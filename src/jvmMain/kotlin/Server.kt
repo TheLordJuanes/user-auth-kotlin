@@ -35,20 +35,14 @@ fun saveUsersInTextFile() {
     File(fileName).writeText(line)
 }
 
-<<<<<<< HEAD
-fun addUser(data: String) {
-    var parts = data.split("\n")
-    users=null
-=======
 fun loadUsers(data: String) {
     val parts = data.split("\n")
     users.clear()
     for (i in 1 until parts.size) {
-        val parts2 = parts[i].split(";")
+        val parts2 = parts[i].split(delimiter)
         val user = User(parts2[0], parts2[1], parts2[3], parts2[3], parts2[4])
         users.add(user)
     }
->>>>>>> 581c963badde2f4b9710fd2e4ea6123d43c8264d
 }
 
 fun main() {
@@ -81,16 +75,11 @@ fun main() {
                 val signed: User? = getUserByUsername(username)
                 if (signed != null) {
                     if (signed.password == password) {
-                        //signed.signIn.
                         call.respondRedirect("/signedIn")
                     } else {
-                        //TO DO
-                        //alert("The password is wrong!")
                         call.respondRedirect("/")
                     }
                 } else {
-                    //TO DO
-                    //alert("This username doesn't exist!")
                     call.respondRedirect("/")
                 }
             }
@@ -117,7 +106,7 @@ fun main() {
                         call.respondRedirect("/register")
                     }
                 }
-                else{
+                else {
                     //alert el usuario ya existe
                     call.respondRedirect("/register")
                 }
