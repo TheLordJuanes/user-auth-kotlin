@@ -6,8 +6,7 @@ import kotlinx.coroutines.*
 
 private val scope = MainScope()
 
-val App = functionalComponent<RProps> {
-
+val App = functionalComponent<RProps> { _ ->
     val (users, setUsers) = useState(emptyList<User>())
 
     useEffect {
@@ -17,20 +16,17 @@ val App = functionalComponent<RProps> {
     }
     users.forEach { item ->
         tr {
+            key = (item.id).toString()
             td {
-                key = item.toString()
                 +"${item.username}"
             }
             td {
-                key = item.toString()
                 +"${item.lastName}"
             }
             td {
-                key = item.toString()
                 +"${item.firstName}"
             }
             td {
-                key = item.toString()
                 +"${item.birthDate}"
             }
         }

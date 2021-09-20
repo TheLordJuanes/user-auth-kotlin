@@ -15,8 +15,8 @@ const val delimiter: String = ";"
 const val fileName: String = "database.txt"
 
 var users = mutableListOf(
-    User("seyerman", "seyer123", "Juan", "Reyes", "01/04/1995"),
-    User("favellaneda", "fave321", "Fabio", "Avellaneda", "06/09/1987")
+    User("seyerman", "seyer123", "Juan", "Reyes", "01/04/1995", 1),
+    User("favellaneda", "fave321", "Fabio", "Avellaneda", "06/09/1987", 2)
 )
 fun getUserByUsername(username: String): User? {
     for (user in users) {
@@ -28,7 +28,7 @@ fun getUserByUsername(username: String): User? {
 }
 
 fun saveUsersInTextFile() {
-    var line = "Username;Password;Firstname;Lastname;Birthdate\n"
+    var line = "Username;Password;Firstname;Lastname;Birthdate;ID\n"
     for (user in users) {
         line += user.username + delimiter + user.password + delimiter + user.firstName + delimiter + user.lastName + delimiter + user.birthDate + "\n"
     }
