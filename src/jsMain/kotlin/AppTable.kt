@@ -1,11 +1,10 @@
-import io.ktor.http.HttpHeaders.Server
 import react.*
 import react.dom.*
 import kotlinx.coroutines.*
 
 private val scope = MainScope()
 
-val App = functionalComponent<RProps> { _ ->
+val AppTable = functionalComponent<RProps> {
     val (users, setUsers) = useState(emptyList<User>())
 
     useEffect {
@@ -17,23 +16,17 @@ val App = functionalComponent<RProps> { _ ->
         tr {
             key = (item.id).toString()
             td {
-                +"${item.username}"
+                +item.username
             }
             td {
-                +"${item.lastName}"
+                +item.lastName
             }
             td {
-                +"${item.firstName}"
+                +item.firstName
             }
             td {
-                +"${item.birthDate}"
+                +item.birthDate
             }
         }
-    }
-}
-
-val UserLogged = functionalComponent<RProps> {
-    p {
-
     }
 }

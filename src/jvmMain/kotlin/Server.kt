@@ -14,13 +14,15 @@ import java.io.File
 const val delimiter: String = ";"
 const val fileName: String = "database.txt"
 
-var userLogged : User? = null
-
 var logged: Boolean = false
 
 var users = mutableListOf(
     User("seyerman", "seyer123", "Juan", "Reyes", "01-04-1995", 1),
     User("favellaneda", "fave321", "Fabio", "Avellaneda", "06-09-1987", 2)
+)
+
+var alerts = mutableListOf(
+    Alerts("", "", "", "")
 )
 
 fun getUserByUsername(username: String): User? {
@@ -45,7 +47,7 @@ fun loadUsers(data: String) {
     users.clear()
     for (i in 1 until parts.size) {
         val parts2 = parts[i].split(delimiter)
-        val user = User(parts2[0], parts2[1], parts2[3], parts2[3], parts2[4], parts2[5].toInt())
+        val user = User(parts2[0], parts2[1], parts2[2], parts2[3], parts2[4], parts2[5].toInt())
         users.add(user)
     }
 }
@@ -73,6 +75,11 @@ fun main() {
                     call.respond(HttpStatusCode.OK)
                 }
             }
+            route(Alerts.path) {
+                get {
+                    call.respond(alerts)
+                }
+            }
             post("/signIn") {
                 val params = call.receiveParameters()
                 val username: String = params["Username"].toString()
@@ -81,13 +88,16 @@ fun main() {
                 if (signed != null) {
                     if (signed.password == password) {
                         logged = true
-                        userLogged = signed
                         call.respondRedirect("/signedIn")
+                        alerts[0].alertUserLogged = username
+                        alerts[3].alertSignedIn = "You are successfully logged in!"
                     } else {
                         call.respondRedirect("/")
+                        alerts[1].alertLogin = "The password is wrong!"
                     }
                 } else {
                     call.respondRedirect("/")
+                    alerts[1].alertLogin = "The specified username doesn't exist!"
                 }
             }
             post("/signUp") {
@@ -98,20 +108,22 @@ fun main() {
                 val password: String = params["Password"].toString()
                 val confirmPwd: String = params["ConfirmPwd"].toString()
                 val birthdate: String = params["Birthdate"].toString()
-                val signed: User? = getUserByUsername(username)
-                if(!username.contains(";") && !firstname.contains(";") && !lastname.contains(";") && !password.contains(";") && !confirmPwd.contains(";")){
-                if(signed == null) {
-                    if (confirmPwd == password) {
-                        val user = User(username, password, firstname, lastname, birthdate, users.size + 1)
-                        users.add(user)
-                        saveUsersInTextFile()
-                        call.respondRedirect("/")
+                if (!username.contains(";") && !firstname.contains(";") && !lastname.contains(";") && !password.contains(";") && !confirmPwd.contains(";")) {
+                    val signed: User? = getUserByUsername(username)
+                    if (signed == null) {
+                        if (confirmPwd == password) {
+                            val user = User(username, password, firstname, lastname, birthdate, users.size + 1)
+                            users.add(user)
+                            saveUsersInTextFile()
+                            call.respondRedirect("/")
+                        } else {
+                            alerts[2].alertRegister = "Passwords don't match!"
+                        }
+                    } else {
+                        alerts[2].alertRegister = "The specified username already exist!"
                     }
                 } else {
-                    call.respondRedirect("/register")
-                }
-                } else {
-                    call.respondRedirect("/register")
+                    alerts[2].alertRegister = "Text fields can't contain the character \";\""
                 }
             }
             get("/") {
@@ -136,6 +148,7 @@ fun main() {
                         ContentType.Text.Html
                     )
                 } else {
+                    alerts[1].alertLogin = "You aren't logged..."
                     call.respondRedirect("/")
                 }
             }

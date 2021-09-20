@@ -1,4 +1,3 @@
-import io.ktor.http.*
 import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.client.features.json.JsonFeature
@@ -15,9 +14,6 @@ suspend fun getUsers(): List<User> {
     return jsonClient.get(endpoint + User.path)
 }
 
-suspend fun addUser(user: User) {
-    jsonClient.post<Unit>(endpoint + User.path) {
-        contentType(ContentType.Application.Json)
-        body = user
-    }
+suspend fun getAlerts(): List<Alerts> {
+    return jsonClient.get(endpoint + Alerts.path)
 }

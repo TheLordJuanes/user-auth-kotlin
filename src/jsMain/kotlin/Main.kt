@@ -3,10 +3,29 @@ import react.dom.render
 import kotlinx.browser.document
 
 fun main() {
-    render(document.getElementById("usernameLogged")) {
-        child(UserLogged)
+    if (document.getElementById("users") != null) {
+        render(document.getElementById("users")) {
+            child(AppTable)
+        }
     }
-    render(document.getElementById("users")) {
-        child(App)
+    if (document.getElementById("usernameLogged") != null) {
+        render(document.getElementById("usernameLogged")) {
+            child(AppUserLogged)
+        }
+    }
+    if (document.getElementById("loginAlert") != null) {
+        render(document.getElementById("loginAlert")) {
+            child(AppAlertLogin)
+        }
+    }
+    if (document.getElementById("loggedAlert") != null) {
+        render(document.getElementById("loggedAlert")) {
+            child(AppAlertSignedIn)
+        }
+    }
+    if (document.getElementById("registerAlert") != null) {
+        render(document.getElementById("registerAlert")) {
+            child(AppAlertRegister)
+        }
     }
 }
