@@ -1,3 +1,4 @@
-Username;Password;Firstname;Lastname;Birthdate;id
-seyerman;seyer123;Reyes;Reyes;01/04/1995;1
-favellaneda;fave321;Avellaneda;Avellaneda;06/09/1987;2
+Username;Password;Firstname;Lastname;Birthdate;ID
+seyerman;seyer123;Reyes;Reyes;01-04-1995;1
+favellaneda;fave321;Avellaneda;Avellaneda;06-09-1987;2
+Cpasuy;123;Carolina;Pasuy;2021-09-30;3

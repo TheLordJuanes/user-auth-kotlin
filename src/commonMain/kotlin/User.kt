@@ -7,7 +7,7 @@ data class User(
     val firstName: String,
     val lastName: String,
     val birthDate: String,
-    val id: Int = username.hashCode()
+    val id: Int
 ) {
     companion object {
         const val path = "/users"
