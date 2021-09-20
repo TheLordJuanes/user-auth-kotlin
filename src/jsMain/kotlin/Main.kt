@@ -18,11 +18,6 @@ fun main() {
             child(AppAlertLogin)
         }
     }
-    if (document.getElementById("loggedAlert") != null) {
-        render(document.getElementById("loggedAlert")) {
-            child(AppAlertSignedIn)
-        }
-    }
     if (document.getElementById("registerAlert") != null) {
         render(document.getElementById("registerAlert")) {
             child(AppAlertRegister)

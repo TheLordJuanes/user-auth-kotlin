@@ -22,7 +22,7 @@ var users = mutableListOf(
 )
 
 var alerts = mutableListOf(
-    Alerts("", "", "", "")
+    Alerts("", "", "")
 )
 
 fun getUserByUsername(username: String): User? {
@@ -35,7 +35,7 @@ fun getUserByUsername(username: String): User? {
 }
 
 fun saveUsersInTextFile() {
-    var line = "Username;Password;Firstname;Lastname;Birthdate;ID\n"
+    var line = "Username;Password;FirstName;LastName;Birthdate;ID\n"
     for (user in users) {
         line += user.username + delimiter + user.password + delimiter + user.firstName + delimiter + user.lastName + delimiter + user.birthDate + delimiter + user.id + "\n"
     }
@@ -90,14 +90,13 @@ fun main() {
                         logged = true
                         call.respondRedirect("/signedIn")
                         alerts[0].alertUserLogged = username
-                        alerts[3].alertSignedIn = "You are successfully logged in!"
                     } else {
                         call.respondRedirect("/")
-                        alerts[1].alertLogin = "The password is wrong!"
+                        alerts[0].alertLogin = "The password is wrong!"
                     }
                 } else {
                     call.respondRedirect("/")
-                    alerts[1].alertLogin = "The specified username doesn't exist!"
+                    alerts[0].alertLogin = "The specified username doesn't exist!"
                 }
             }
             post("/signUp") {
@@ -116,14 +115,19 @@ fun main() {
                             users.add(user)
                             saveUsersInTextFile()
                             call.respondRedirect("/")
+                            alerts[0].alertLogin = "New user account successfully registered!"
+                            call.respondRedirect("/register")
                         } else {
-                            alerts[2].alertRegister = "Passwords don't match!"
+                            alerts[0].alertRegister = "Passwords don't match!"
+                            call.respondRedirect("/register")
                         }
                     } else {
-                        alerts[2].alertRegister = "The specified username already exist!"
+                        alerts[0].alertRegister = "The specified username already exist!"
+                        call.respondRedirect("/register")
                     }
                 } else {
-                    alerts[2].alertRegister = "Text fields can't contain the character \";\""
+                    alerts[0].alertRegister = "Text fields can't contain the character \";\""
+                    call.respondRedirect("/register")
                 }
             }
             get("/") {
@@ -131,6 +135,7 @@ fun main() {
                     this::class.java.classLoader.getResource("index.html")!!.readText(),
                     ContentType.Text.Html
                 )
+                alerts[0].alertRegister = ""
                 logged = false
                 val data = File(fileName).inputStream().readBytes().toString(Charsets.UTF_8)
                 loadUsers(data)
@@ -140,6 +145,7 @@ fun main() {
                     this::class.java.classLoader.getResource("register.html")!!.readText(),
                     ContentType.Text.Html
                 )
+                alerts[0].alertLogin = ""
             }
             get("/signedIn") {
                 if(logged) {
@@ -147,8 +153,9 @@ fun main() {
                         this::class.java.classLoader.getResource("signedIn.html")!!.readText(),
                         ContentType.Text.Html
                     )
+                    alerts[0].alertLogin = ""
                 } else {
-                    alerts[1].alertLogin = "You aren't logged..."
+                    alerts[0].alertLogin = "You aren't logged..."
                     call.respondRedirect("/")
                 }
             }
