@@ -8,7 +8,7 @@ Note: Visiting http://localhost:9090/ should present you the Login page when run
 
 ## Documentation 📃
 
-Check the UML Class Diagram design [here](doc/ClassDiagram.pdf)
+Check the UML Class Diagram design [here](docs/ClassDiagram.pdf)
 
 ## Technical conditions 🛠️
 
